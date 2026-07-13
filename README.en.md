@@ -17,6 +17,15 @@ Ink Flow Painting is an interactive web application that recreates ink blooming,
 - Adjustable brush size, ink density, water flow, and drop interval
 - Pause, clear, and PNG export controls
 
+## Using the App on a Smartphone
+
+The app starts in **Freehand** mode. On narrow smartphone screens, the mode controls, color palette, and sliders start collapsed to leave more room for the canvas.
+
+- Tap **調整 (Adjust)** in the lower-right corner to open the settings panel from the bottom.
+- **停止 (Pause)**, **清める (Clear)**, and **保存 (Save)** remain visible at the top.
+- Close the panel with **閉じる (Close)** or by tapping outside it.
+- The layout adapts to portrait and landscape orientations and respects safe areas around notches and home indicators.
+
 ## Project Structure
 
 ```text

@@ -135,7 +135,7 @@ export default function Home() {
     due: 0,
   });
 
-  const [mode, setMode] = useState<Mode>("auto");
+  const [mode, setMode] = useState<Mode>("manual");
   const [selectedColor, setSelectedColor] = useState(PALETTE[0]);
   const [brush, setBrush] = useState(0.021);
   const [inkLoad, setInkLoad] = useState(0.82);

@@ -32,6 +32,14 @@ This mode automatically adds ink drops and **dispersal pulses**, which push exis
 
 The flow itself is invisible on an empty area of the canvas. When pigment later reaches that area, it follows the current that was created there.
 
+## Using the App on a Smartphone
+
+The app starts in **Freehand** mode. On narrow smartphone screens, the mode controls, color palette, and sliders start collapsed to leave more room for the canvas. Tap **調整 (Adjust)** in the lower-right corner to open the settings panel from the bottom.
+
+- **停止 (Pause)**, **清める (Clear)**, and **保存 (Save)** remain visible at the top.
+- Close the settings panel with **閉じる (Close)** or by tapping outside it.
+- The layout adapts to portrait and landscape orientations and respects safe areas around notches and home indicators.
+
 ## How the Ink Blooms
 
 Behind the canvas, the application maintains several computational maps that represent water direction and speed, pressure, pigment color, and pigment density. On every frame, the GPU performs the following steps:

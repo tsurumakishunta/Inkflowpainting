@@ -33,6 +33,9 @@ test("server-renders the water-ink studio", async () => {
   assert.match(html, /調整/);
   assert.match(html, /aria-controls="ink-controls"/);
   assert.match(html, /aria-expanded="false"/);
+  assert.match(html, /class="is-active" aria-pressed="true"><span>手描き<\/span>/);
+  assert.match(html, /水面をなぞって描く/);
+  assert.doesNotMatch(html, /落とす間合い/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 
@@ -58,7 +61,7 @@ test("keeps the fluid experience and its controls wired", async () => {
   assert.doesNotMatch(engine, /edgeDeposit/);
   assert.match(engine, /vUv\s*=\s*p\s*;/);
   assert.doesNotMatch(engine, /vUv\s*=\s*p\s*\*\s*0\.5/);
-  assert.match(page, /useState<Mode>\("auto"\)/);
+  assert.match(page, /useState<Mode>\("manual"\)/);
   assert.match(page, /aria-controls="ink-controls"/);
   assert.match(page, /aria-expanded=\{mobileControlsOpen\}/);
   assert.match(page, /is-mobile-open/);
