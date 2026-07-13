@@ -27,14 +27,21 @@ test("server-renders the water-ink studio", async () => {
   assert.match(html, /手描き/);
   assert.match(html, /色うつろい/);
   assert.match(html, /墨流し/);
+  assert.match(html, /停止/);
+  assert.match(html, /清める/);
+  assert.match(html, /保存/);
+  assert.match(html, /調整/);
+  assert.match(html, /aria-controls="ink-controls"/);
+  assert.match(html, /aria-expanded="false"/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 
 test("keeps the fluid experience and its controls wired", async () => {
-  const [page, engine, layout, packageJson] = await Promise.all([
+  const [page, engine, layout, styles, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/fluid-engine.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
@@ -52,6 +59,14 @@ test("keeps the fluid experience and its controls wired", async () => {
   assert.match(engine, /vUv\s*=\s*p\s*;/);
   assert.doesNotMatch(engine, /vUv\s*=\s*p\s*\*\s*0\.5/);
   assert.match(page, /useState<Mode>\("auto"\)/);
+  assert.match(page, /aria-controls="ink-controls"/);
+  assert.match(page, /aria-expanded=\{mobileControlsOpen\}/);
+  assert.match(page, /is-mobile-open/);
+  assert.match(page, /mobile-control-toggle/);
+  assert.match(styles, /\.control-deck\.is-ready\.is-mobile-open/);
+  assert.match(styles, /safe-area-inset-bottom/);
+  assert.doesNotMatch(styles, /\.quiet-button:not\(\.save-button\)\s*\{\s*display:\s*none/);
   assert.match(layout, /lang="ja"/);
+  assert.match(layout, /viewportFit:\s*"cover"/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });

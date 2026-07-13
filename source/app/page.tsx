@@ -122,6 +122,8 @@ export default function Home() {
   const engineRef = useRef<FluidEngine | null>(null);
   const pointersRef = useRef(new Map<number, ActivePointer>());
   const hoverPointerRef = useRef<HoverPointer | null>(null);
+  const mobileControlToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileControlCloseRef = useRef<HTMLButtonElement>(null);
   const lastWaterStirRef = useRef(0);
   const frameRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
@@ -140,6 +142,7 @@ export default function Home() {
   const [flow, setFlow] = useState(0.58);
   const [autoSpeed, setAutoSpeed] = useState(0.46);
   const [paused, setPaused] = useState(false);
+  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
   const [notice, setNotice] = useState("");
@@ -165,6 +168,25 @@ export default function Home() {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 1800);
   }, []);
+
+  const closeMobileControls = useCallback(() => {
+    setMobileControlsOpen(false);
+    window.requestAnimationFrame(() => mobileControlToggleRef.current?.focus());
+  }, []);
+
+  useEffect(() => {
+    if (!mobileControlsOpen) return;
+
+    const focusFrame = window.requestAnimationFrame(() => mobileControlCloseRef.current?.focus());
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMobileControls();
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [closeMobileControls, mobileControlsOpen]);
 
   const normalizedPoint = useCallback((event: PointerEvent | ReactPointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -606,7 +628,7 @@ export default function Home() {
           </span>
           <button className="quiet-button" type="button" onClick={() => setPaused((value) => !value)}>
             <span aria-hidden="true">{paused ? "▶" : "Ⅱ"}</span>
-            {paused ? "再開" : "静止"}
+            {paused ? "再開" : "停止"}
           </button>
           <button className="quiet-button" type="button" onClick={clearArtwork}>
             <span className="clear-symbol" aria-hidden="true">○</span>
@@ -625,7 +647,32 @@ export default function Home() {
         <p className="hero-note">流れに触れ、色を落とす。<br />偶然が描く一瞬を、眺めてみる。</p>
       </section>
 
-      <section className={`control-deck ${ready ? "is-ready" : ""}`} aria-label="墨流しの操作">
+      {mobileControlsOpen && (
+        <button
+          className="mobile-control-scrim"
+          type="button"
+          aria-label="調整メニューを閉じる"
+          onClick={closeMobileControls}
+        />
+      )}
+
+      <section
+        id="ink-controls"
+        className={`control-deck ${ready ? "is-ready" : ""} ${mobileControlsOpen ? "is-mobile-open" : ""}`}
+        aria-label="墨流しの操作"
+      >
+        <div className="mobile-deck-header">
+          <p><span>TOOLS</span> 墨と水の調整</p>
+          <button
+            ref={mobileControlCloseRef}
+            className="mobile-deck-close"
+            type="button"
+            onClick={closeMobileControls}
+          >
+            <span aria-hidden="true">×</span>
+            閉じる
+          </button>
+        </div>
         <div className="deck-primary">
           <div className="mode-tabs" role="group" aria-label="描画モード">
             {(Object.keys(MODE_COPY) as Mode[]).map((item) => (
@@ -686,6 +733,19 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <button
+        ref={mobileControlToggleRef}
+        className={`mobile-control-toggle ${mobileControlsOpen ? "is-open" : ""}`}
+        type="button"
+        aria-controls="ink-controls"
+        aria-expanded={mobileControlsOpen}
+        aria-label={mobileControlsOpen ? "調整メニューを閉じる" : "調整メニューを開く"}
+        onClick={() => (mobileControlsOpen ? closeMobileControls() : setMobileControlsOpen(true))}
+      >
+        <span aria-hidden="true">{mobileControlsOpen ? "×" : "≡"}</span>
+        {mobileControlsOpen ? "閉じる" : "調整"}
+      </button>
 
       <div className="gesture-hint" aria-hidden="true">
         <span className="gesture-ring"><i /></span>

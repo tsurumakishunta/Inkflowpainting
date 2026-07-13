@@ -187,6 +187,8 @@ button {
 }
 
 .quiet-button:focus-visible,
+.mobile-control-toggle:focus-visible,
+.mobile-deck-close:focus-visible,
 .mode-tabs button:focus-visible,
 .palette button:focus-visible,
 input[type="range"]:focus-visible {
@@ -208,6 +210,12 @@ input[type="range"]:focus-visible {
 .clear-symbol {
   font-size: 15px;
   line-height: 0;
+}
+
+.mobile-control-toggle,
+.mobile-control-scrim,
+.mobile-deck-header {
+  display: none;
 }
 
 .hero-copy {
@@ -283,13 +291,18 @@ input[type="range"]:focus-visible {
   box-shadow: 0 24px 80px rgba(37, 35, 28, 0.12);
   backdrop-filter: blur(20px) saturate(0.78);
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(12px);
-  transition: opacity 500ms ease, transform 500ms ease;
+  transition: opacity 500ms ease, transform 500ms ease, visibility 0s linear 500ms;
 }
 
 .control-deck.is-ready {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 0s;
 }
 
 .deck-primary {
@@ -663,34 +676,55 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 720px), (max-height: 520px) and (max-width: 960px) {
   .ink-app {
-    min-height: 560px;
+    height: 100dvh;
+    min-height: 0;
   }
 
   .topbar {
-    padding: 16px;
+    z-index: 8;
+    padding:
+      max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      10px
+      max(10px, env(safe-area-inset-left));
   }
 
   .brand-mark {
-    width: 42px;
-    height: 42px;
-    font-size: 13px;
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
   }
 
   .brand-copy,
-  .water-status,
-  .quiet-button:not(.save-button) {
+  .water-status {
     display: none;
   }
 
+  .top-actions {
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .quiet-button,
   .save-button {
-    min-height: 36px;
+    min-width: 0;
+    min-height: 44px;
+    gap: 4px;
+    padding: 7px 8px;
+    background-color: rgba(247, 245, 238, 0.88);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .save-button {
+    background: rgba(23, 25, 28, 0.92);
   }
 
   .hero-copy {
-    top: 15%;
-    left: 24px;
+    top: max(82px, 15%);
+    left: max(18px, env(safe-area-inset-left));
   }
 
   .eyebrow {
@@ -706,12 +740,129 @@ input[type="range"]::-moz-range-thumb {
     display: none;
   }
 
+  .mobile-control-scrim {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: rgba(30, 31, 28, 0.16);
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+  }
+
+  .mobile-control-toggle {
+    position: absolute;
+    z-index: 7;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 78px;
+    min-height: 46px;
+    gap: 7px;
+    padding: 9px 14px;
+    border: 1px solid rgba(22, 24, 22, 0.72);
+    border-radius: 2px;
+    background: rgba(23, 25, 28, 0.9);
+    box-shadow: 0 12px 34px rgba(31, 30, 25, 0.2);
+    color: #f4f1e7;
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .mobile-control-toggle > span {
+    font-size: 17px;
+    line-height: 1;
+  }
+
   .control-deck {
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
+    z-index: 6;
+    right: max(10px, env(safe-area-inset-right));
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    left: max(10px, env(safe-area-inset-left));
     display: block;
     width: auto;
+    max-height: min(72dvh, calc(100dvh - 140px));
+    margin: 0;
+    overflow-y: auto;
+    border-radius: 3px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px);
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
+  }
+
+  .control-deck.is-ready {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px);
+  }
+
+  .control-deck.is-ready.is-mobile-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  .mobile-deck-header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 4px 6px 4px 14px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(239, 237, 228, 0.97);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-deck-header p {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+    font-family: var(--display-serif);
+    font-size: 12px;
+  }
+
+  .mobile-deck-header p span {
+    color: rgba(28, 30, 27, 0.48);
+    font-family: Georgia, serif;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .mobile-deck-close {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 5px;
+    padding: 6px 9px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .mobile-deck-close span {
+    font-size: 17px;
   }
 
   .deck-primary {
@@ -725,7 +876,7 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .mode-tabs button {
-    min-height: 42px;
+    min-height: 44px;
     border-right: 1px solid var(--line);
     border-bottom: 0;
   }
@@ -760,7 +911,10 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .palette button {
+    flex: 1;
+    justify-content: center;
     min-width: 0;
+    min-height: 44px;
     padding: 4px 6px;
   }
 
@@ -785,6 +939,27 @@ input[type="range"]::-moz-range-thumb {
     margin-top: 8px;
   }
 
+  input[type="range"] {
+    height: 30px;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track,
+  input[type="range"]::-moz-range-track,
+  input[type="range"]::-moz-range-progress {
+    height: 2px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    width: 19px;
+    height: 19px;
+    margin-top: -8.5px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 19px;
+    height: 19px;
+  }
+
   .gesture-hint,
   .signature {
     display: none;
@@ -795,7 +970,7 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-@media (max-height: 700px) and (min-width: 721px) {
+@media (max-height: 700px) and (min-height: 521px) and (min-width: 721px) {
   .topbar {
     padding-top: 14px;
   }
