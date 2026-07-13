@@ -1,5 +1,7 @@
 # Ink Flow Painting
 
+**日本語** | [English](./README.en.md)
+
 水面へ落とした墨が、滲み、混ざり、流れながら少しずつ薄くなっていく様子を描く、インタラクティブなWebアプリケーションです。
 
 ![墨流しの動作デモ](./docs/assets/墨流し.gif)
@@ -21,7 +23,8 @@
 Inkflowpainting/
 ├─ docs/        アプリの説明とデモGIF
 ├─ source/      Webアプリケーションのソースコード
-├─ README.md    プロジェクト概要
+├─ README.md    日本語のプロジェクト概要
+├─ README.en.md 英語のプロジェクト概要
 └─ LICENSE
 ```
 
