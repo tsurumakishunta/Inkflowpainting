@@ -1,5 +1,11 @@
 # Ink Flow Painting
 
+## Live Demo
+
+**[Open the artwork on GitHub Pages](https://tsurumakishunta.github.io/Inkflowpainting/)**
+
+The GitHub Pages edition is rebuilt and deployed automatically whenever the `main` branch is updated. On smartphones, the adjustment panel starts collapsed to preserve canvas space, while Pause, Clear, and Save remain visible at the top.
+
 [日本語](./README.md) | **English**
 
 Ink Flow Painting is an interactive web application that recreates ink blooming, blending, drifting across water, and gradually fading as it disperses.

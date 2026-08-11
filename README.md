@@ -1,5 +1,11 @@
 # Ink Flow Painting
 
+## オンラインデモ
+
+**[GitHub Pagesで作品を開く](https://tsurumakishunta.github.io/Inkflowpainting/)**
+
+GitHub Pages版は、`main`ブランチへのプッシュ時にGitHub Actionsで自動更新されます。スマートフォンでは描画領域を広く保つため調整メニューが折りたたまれ、「停止」「清める」「保存」は常に画面上部に表示されます。
+
 **日本語** | [English](./README.en.md)
 
 水面へ落とした墨が、滲み、混ざり、流れながら少しずつ薄くなっていく様子を描く、インタラクティブなWebアプリケーションです。
